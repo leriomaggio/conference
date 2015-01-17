@@ -222,7 +222,7 @@ class SubmissionForm(forms.Form):
         talk = models.Talk.objects.createFromTitle(
             title=data['title'], conference=settings.CONFERENCE, speaker=speaker,
             status='proposed', duration=data['duration'], language=data['language'],
-            level=data['level'], type=data['type'],
+            level=data['level'], type=data['type'], track=data['sub_community'],
         )
         talk.qa_duration = data.get('qa_duration', 0)
         talk.save()
@@ -287,7 +287,7 @@ class TalkForm(forms.ModelForm):
             self.instance = models.Talk.objects.createFromTitle(
                 title=data['title'], conference=settings.CONFERENCE, speaker=speaker,
                 status='proposed', duration=data['duration'], language=data['language'],
-                level=data['level'],
+                level=data['level'], track=data['sub_community'],
             )
         inst = super(TalkForm, self).save(commit=commit)
         inst.setAbstract(data['abstract'])

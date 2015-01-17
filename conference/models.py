@@ -506,7 +506,9 @@ class TalkManager(models.Manager):
                 qs = qs.filter(conference=conference)
             return qs
 
-    def createFromTitle(self, title, conference, speaker, status='proposed', duration=30, language='en', level='beginner', training_available=False, type='s'):
+    def createFromTitle(self, title, conference, speaker, status='proposed', duration=30,
+                        language='en', level='beginner', training_available=False, type='s',
+                        track=''):
         slug = slugify(title)
         talk = Talk()
         talk.title = title
@@ -517,6 +519,7 @@ class TalkManager(models.Manager):
         talk.level = level
         talk.training_available = training_available
         talk.type = type
+        talk.track = track  # Added Track Info
         with transaction.commit_on_success():
             count = 0
             check = slug
@@ -540,6 +543,15 @@ TALK_TYPE = (
     ('p', 'Poster session'),
     ('h', 'Help desk'),
 )
+
+TALK_SUBCOMMUNITY = (
+    ('', _('None')),
+    ('odoo', _('Odoo')),
+    ('pydata', _('PyData')),
+    ('django', _('DjangoVillage')),
+    ('pycon', _('PyCon Sei')),
+)
+
 class Talk(models.Model, UrlMixin):
     title = models.CharField(_('Talk title'), max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
@@ -584,6 +596,10 @@ class Talk(models.Model, UrlMixin):
 
     tags = TaggableManager(through=ConferenceTaggedItem)
     objects = TalkManager()
+
+    # Track Info Moved Here
+    track = models.CharField(verbose_name=_('Sub-Community Track'), max_length=20,
+                             choices=TALK_SUBCOMMUNITY, default='')
 
     class Meta:
         ordering = ['title']
