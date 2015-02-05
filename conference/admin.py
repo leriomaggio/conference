@@ -524,10 +524,10 @@ class TalkAdminForm(MultiLingualForm):
 
 class TalkAdmin(admin.ModelAdmin):
     actions = ('do_accept_talks_in_schedule', 'do_speakers_data',)
-    list_display = ('title', 'conference', '_speakers', 'duration', '_sub_community',
+    list_display = ('title', 'conference', '_speakers', 'duration',
                     'status', '_slides', '_video')
     list_editable = ('status',)
-    list_filter = ('conference', 'status', )
+    list_filter = ('status', )
     ordering = ('-conference', 'title')
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ('title',)
@@ -566,11 +566,6 @@ class TalkAdmin(admin.ModelAdmin):
             output.append('<a href="%(url)s">%(name)s</a> (<a href="mailto:%(mail)s">mail</a>)' % args)
         return '<br />'.join(output)
     _speakers.allow_tags = True
-
-    def _sub_community(self, obj):
-        return obj.track
-    _sub_community.short_description = 'Sub-Community'
-    _sub_community.admin_order_field = 'track'
 
     def _slides(self, obj):
         return bool(obj.slides)
