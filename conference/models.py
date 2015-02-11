@@ -506,8 +506,7 @@ class TalkManager(models.Manager):
                 qs = qs.filter(conference=conference)
             return qs
 
-    def createFromTitle(self, title, conference, speaker, status='proposed', duration=30,
-                        language='en', level='beginner', training_available=False, type='s'):
+    def createFromTitle(self, title, conference, speaker, status='proposed', duration=30, language='en', level='beginner', training_available=False, type='s'):
         slug = slugify(title)
         talk = Talk()
         talk.title = title
@@ -541,7 +540,6 @@ TALK_TYPE = (
     ('p', 'Poster session'),
     ('h', 'Help desk'),
 )
-
 class Talk(models.Model, UrlMixin):
     title = models.CharField(_('Talk title'), max_length=100)
     slug = models.SlugField(max_length=100, unique=True)

@@ -524,10 +524,9 @@ class TalkAdminForm(MultiLingualForm):
 
 class TalkAdmin(admin.ModelAdmin):
     actions = ('do_accept_talks_in_schedule', 'do_speakers_data',)
-    list_display = ('title', 'conference', '_speakers', 'duration',
-                    'status', '_slides', '_video')
+    list_display = ('title', 'conference', '_speakers', 'duration', 'status', '_slides', '_video')
     list_editable = ('status',)
-    list_filter = ('status', )
+    list_filter = ('conference', 'status',)
     ordering = ('-conference', 'title')
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ('title',)
@@ -574,7 +573,6 @@ class TalkAdmin(admin.ModelAdmin):
     def _video(self, obj):
         return bool(obj.video_type) and (bool(obj.video_url) or bool(obj.video_file))
     _video.boolean = True
-
 
     #@transaction.commit_on_success
     def do_accept_talks_in_schedule(self, request, queryset):
