@@ -98,10 +98,14 @@ def ranking_of_talks(talks, missing_vote=5):
     talks_map = dict((t.id, t) for t in talks)
     in_ = _input_for_ranking_of_talks(talks_map.values(), missing_vote=missing_vote)
 
+    env = {
+        'PATH': os.environ['PATH']
+    }
     pipe = subprocess.Popen(
         [vengine],
         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        close_fds=True
+        close_fds=True,
+        env=env
     )
     out, err = pipe.communicate(in_)
     if pipe.returncode != 0:
@@ -124,11 +128,11 @@ def voting_results():
         else:
             results = []
             for line in f:
-                pieces = line.split('-', 4)
-                if len(pieces) != 5:
+                pieces = line.split('-', 5)
+                if len(pieces) != 6:
                     continue
                 type = pieces[2].strip()
-                language = pieces[3].strip()
+                language = pieces[4].strip()
                 tid = int(pieces[1].strip())
                 results.append((tid, type, language))
             return results
@@ -704,8 +708,8 @@ def render_event_video_cover(eid, thumb=(256, 256)):
         return False
     image.save(os.path.join(base, fname + '.jpg'), 'JPEG')
 
-    image = settings.VIDEO_COVER_IMAGE(eid, thumb=thumb)
-    image.save(os.path.join(base, fname + '.jpg.thumb'), 'JPEG')
+    # image = settings.VIDEO_COVER_IMAGE(eid, thumb=thumb)
+    # image.save(os.path.join(base, fname + '.jpg.thumb'), 'JPEG')
 
     return True
 
