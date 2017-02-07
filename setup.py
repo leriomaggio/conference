@@ -37,5 +37,6 @@ setup(name='conference',
         'markdown2',
         'Pygments',
         'python-oembed',
+        'numpy',
     ],
 )
